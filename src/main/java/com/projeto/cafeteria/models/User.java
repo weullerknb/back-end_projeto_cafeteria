@@ -18,35 +18,43 @@ import jakarta.validation.constraints.Size;
 @Table(name = "tb_user")
 public class User {
 	
+	public interface CreateUser {
+		
+	}
+	
+	public interface UpdateUser {
+		
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 	
-	@NotBlank
+	@NotBlank(groups = CreateUser.class)
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@NotBlank
+	@NotBlank(groups = CreateUser.class)
 	@Column(name = "cpf", length = 15, nullable = false, unique = true)
 	private String cpf;
 	
-	@NotBlank
+	@NotBlank(groups = CreateUser.class)
 	@Column(name = "birthdate", nullable = false)
 	private String birthdate;
 
-	@NotBlank
+	@NotBlank(groups = CreateUser.class)
 	@Column(name = "phone", length = 15, nullable = false, unique = true)
 	private String phone;
 
-	@NotBlank
+	@NotBlank(groups = CreateUser.class)
 	@Column(name = "email", length = 50, nullable = false, unique = true)
 	private String email;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
-	@NotBlank
-	@Size(min = 8, max = 20)
 	@Column(name = "password", length = 20,  nullable = false)
+	@NotBlank(groups = {CreateUser.class, UpdateUser.class})
+	@Size(groups = {CreateUser.class, UpdateUser.class}, min = 8, max = 20)
 	private String password;
 
 	public User() {
